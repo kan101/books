@@ -8,6 +8,8 @@ import {
 import LayoutMain from '../components/layout/LayoutMain.vue'
 import Error from '../views/Error.vue'
 import Home from '../views/Home.vue'
+import Books from '../views/Books.vue'
+import BookDetails from '../views/BookDetails.vue'
 
 const mainRoutes: RouteRecordRaw[] = [
   {
@@ -15,6 +17,18 @@ const mainRoutes: RouteRecordRaw[] = [
     name: 'Home',
     props: true,
     component: Home,
+  },
+  {
+    path: '/books',
+    name: 'Books',
+    component: Books,
+    props: (route) => ({ page: route.query.page })
+  },
+  {
+    path: '/books/:id',
+    name: 'BookDetails',
+    component: BookDetails,
+    props: true
   },
 ]
 
@@ -31,7 +45,7 @@ const routes: RouteRecordRaw[] = [
     props: true,
     component: LayoutMain,
     children: mainRoutes,
-  },
+  }
 ]
 
 export default function initializeRouter(app: App): Router {
