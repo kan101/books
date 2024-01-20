@@ -1,10 +1,6 @@
 <template>
-  <div>
-    <div v-if="loading">
-      <ContentLoader />
-    </div>
-    <div v-if="error">Error: {{ error }}</div>
-    <div v-if="data">
+  <section>
+    <div v-if="data && !loading">
       <h1 class="text-center text-2xl font-bold my-6">Books</h1>
       <section
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-3"
@@ -13,7 +9,7 @@
           <div class="card card-side bg-base-100 shadow-xl" @click="toBookDetails(book.id)">
             <figure>
               <img
-                :src="book.formats['image/jpeg']"
+                :src="book.formats['image/jpeg'] || NoCoverArt"
                 :alt="`${book.title} cover art`"
               />
             </figure>
@@ -30,7 +26,11 @@
         </article>
       </section>
     </div>
+    <div v-if="loading">
+      <ContentLoader />
+    </div>
     <vue-awesome-paginate
+      v-if="data"
       :total-items="data?.count || 0"
       :items-per-page="32"
       :max-pages-shown="5"
@@ -38,14 +38,18 @@
       paginationContainerClass="join my-4 ml-4 flex justify-center"
       paginateButtonsClass="join-item btn"
     />
-  </div>
+    <div v-if="error">
+      <p>Error: error</p>
+    </div>
+  </section>
 </template>
 
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
 import { useGutendexData } from '../hooks/useGutendexData'
 import { useRoute, useRouter } from 'vue-router'
-import ContentLoader from './ContentLoader.vue'
+import ContentLoader from './loaders/GridLoader.vue'
+import NoCoverArt from '../assets/no-image.jpg'
 
 const router = useRouter()
 const route = useRoute()

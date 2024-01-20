@@ -1,7 +1,14 @@
-import { defineConfig } from 'vite'
+
+
+import { defineConfig } from 'vitest/config'
 import vue from '@vitejs/plugin-vue'
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue()],
+  test: {
+    // enable jest-like global test APIs
+    globals: true,
+    // simulate DOM with happy-dom
+    environment: 'happy-dom'
+  }
 })

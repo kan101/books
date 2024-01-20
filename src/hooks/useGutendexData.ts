@@ -31,7 +31,7 @@ export function useGutendexData(page: Ref<number>) {
       });
     } catch (err: any) {
       error.value = err.message
-      toast.success("Error fetching books", {
+      toast.error(err.message, {
         timeout: 2000
       });
     } finally {

@@ -1,7 +1,7 @@
 <template>
   <section class="container mx-auto p-4">
     <button class="btn mb-2" @click="goBack">Back</button>
-    <div class="card card-side bg-base-100 shadow-xl">
+    <div v-if="!loading" class="card card-side bg-base-100 shadow-xl">
       <div class="card-body">
         <h1 class="card-title">{{ bookDetails.title }}</h1>
         <div class="overflow-x-auto">
@@ -66,7 +66,7 @@
                 <td>
                   <img
                     class="max-w-xs rounded-sm mx-auto"
-                    :src="bookDetails.formats['image/jpeg']"
+                    :src="bookDetails.formats['image/jpeg'] || NoCoverArt"
                     :alt="`${bookDetails.title} cover art`"
                   />
                 </td>
@@ -95,15 +95,23 @@
         </div>
       </div>
     </div>
+    <div v-if="loading">
+      <ContentLoader />
+    </div>
+    <div v-if="error">
+      <p>Error: error</p>
+    </div>
   </section>
 </template>
 
 <script lang="ts" setup>
-import axios from 'axios'
-import { onMounted, ref, PropType } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { ref, PropType } from 'vue'
+import { useBookDetailsData } from '../hooks/useBookDetailsData'
+import { useRouter } from 'vue-router'
+import NoCoverArt from '../assets/no-image.jpg'
+import ContentLoader from './loaders/DetailsLoader.vue'
 
-defineProps({
+const props = defineProps({
   id: {
     type: String as PropType<string>,
     required: true
@@ -111,43 +119,10 @@ defineProps({
 });
 
 const router = useRouter()
+const { data, loading, error } = useBookDetailsData(props.id)
+const bookDetails = ref(data)
 
 function goBack() {
   router.back()
 }
-
-const route = useRoute()
-const bookDetails = ref({
-  id: '1',
-  title: '',
-  authors: [
-    {
-      name: '',
-    },
-  ],
-  translators: [{
-    name: ''
-  }],
-  subjects: [''],
-  bookshelves: [''],
-  languages: [''],
-  media_type: '',
-  copyright: true,
-  download_count: 0,
-  formats: {
-    'image/jpeg': '',
-  },
-})
-
-const fetchBookDetails = async () => {
-  const bookId = route.params.id
-  try {
-    const response = await axios.get(`https://gutendex.com/books/${bookId}`)
-    bookDetails.value = response.data
-  } catch (error) {
-    console.error('Failed to fetch book details:', error)
-  }
-}
-
-onMounted(fetchBookDetails)
 </script>
