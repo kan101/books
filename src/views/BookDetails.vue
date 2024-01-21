@@ -1,6 +1,9 @@
 <template>
   <section class="container mx-auto p-4">
-    <button class="btn mb-2" @click="goBack">Back</button>
+      <button class="btn mb-2 flex items-center" @click="goBack">
+        <img :src="BackArrow" class="h-5 relative" alt="back arrow">
+        Back
+      </button>
     <div v-if="!loading" class="card card-side bg-base-100 shadow-xl">
       <div class="card-body">
         <h1 class="card-title">{{ bookDetails.title }}</h1>
@@ -87,7 +90,7 @@
               <tr v-for="(url, format) in bookDetails.formats" :key="format">
                 <td>{{ format }}</td>
                 <td>
-                  <a :href="url" target="_blank" rel="noopener">Download</a>
+                  <a :href="url" target="_blank" rel="noopener" class="link link-primary">Download</a>
                 </td>
               </tr>
             </tbody>
@@ -109,7 +112,8 @@ import { ref, PropType } from 'vue'
 import { useBookDetailsData } from '../hooks/useBookDetailsData'
 import { useRouter } from 'vue-router'
 import NoCoverArt from '../assets/no-image.jpg'
-import ContentLoader from './loaders/DetailsLoader.vue'
+import BackArrow from '../assets/back.svg'
+import ContentLoader from '../components/loaders/DetailsLoader.vue'
 
 const props = defineProps({
   id: {

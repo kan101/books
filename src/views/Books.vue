@@ -30,13 +30,15 @@
       <ContentLoader />
     </div>
     <vue-awesome-paginate
-      v-if="data"
+      v-if="data && !loading"
       :total-items="data?.count || 0"
       :items-per-page="32"
       :max-pages-shown="5"
       v-model="currentPage"
       paginationContainerClass="join my-4 ml-4 flex justify-center"
       paginateButtonsClass="join-item btn"
+      prev-button-content="prev"
+      next-button-content="next"
     />
     <div v-if="error">
       <p>Error: error</p>
@@ -48,7 +50,7 @@
 import { ref, watch } from 'vue'
 import { useGutendexData } from '../hooks/useGutendexData'
 import { useRoute, useRouter } from 'vue-router'
-import ContentLoader from './loaders/GridLoader.vue'
+import ContentLoader from '../components/loaders/GridLoader.vue'
 import NoCoverArt from '../assets/no-image.jpg'
 
 const router = useRouter()
@@ -61,8 +63,6 @@ watch(currentPage, (newPage: number) => {
   router.push({ name: 'Books', query: { page: newPage.toString() } });
 });
 
-const toBookDetails = (id: number) => router.push({ name: 'BookDetails', params: { id: id } })
+const toBookDetails = (id: string) => router.push({ name: 'BookDetails', params: { id: id } })
 
 </script>
-<style>
-</style>

@@ -1,28 +1,15 @@
 import { it, expect, vi } from 'vitest'
 import { shallowMount } from '@vue/test-utils'
 import BookDetails from '../views/BookDetails.vue'
-import ContentLoader from '../views/loaders/DetailsLoader.vue'
+import ContentLoader from '../components/loaders/DetailsLoader.vue'
 import { useBookDetailsData } from '../hooks/useBookDetailsData'
 import { ref } from 'vue'
-
-interface Data {
-  id: string
-  title: string
-  authors: Array<{ name: string }>
-  translators: Array<{ name: string }>
-  subjects: string[]
-  bookshelves: string[]
-  languages: string[]
-  media_type: string
-  copyright: boolean
-  download_count: number
-  formats: { 'image/jpeg': string }
-}
+import { Book } from '../types/BookDetailsTypes'
 
 const mockData = {
   loading: ref<boolean>(true),
   error: ref<null | string>(null),
-  data: ref<Data | null>(null),
+  data: ref<Book | null>(null),
 }
 
 vi.mock('../hooks/useBookDetailsData', () => ({
@@ -45,7 +32,6 @@ describe('BookDetails', () => {
   })
 
   it('Displays the loader when loading is true', async() => {
-    console.log(useBookDetailsData('1'), wrapper.html())
     const loader = wrapper.findComponent(ContentLoader)
     expect(loader.exists()).toBe(true)
   })
@@ -91,5 +77,7 @@ describe('BookDetails', () => {
     const h1 = wrapper.find('h1')
     expect(h1.exists()).toBe(true)
     expect(h1.text()).toContain(mockData.data.value.title)
+    console.log(wrapper.findAll("tr").length)
+    expect(wrapper.findAll("tr").length).toEqual(Object.keys(mockData.data.value).length)
   })
 })

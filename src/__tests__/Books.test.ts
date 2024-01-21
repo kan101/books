@@ -1,10 +1,12 @@
 import { it, expect, vi } from 'vitest'
 import { shallowMount } from '@vue/test-utils'
 import Books from '../views/Books.vue'
-import ContentLoader from '../views/loaders/GridLoader.vue'
+import ContentLoader from '../components/loaders/GridLoader.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import { useGutendexData } from '../hooks/useGutendexData'
 import { ref } from 'vue'
+import { Data } from '../types/BookTypes'
+import { results } from '../placeHolders'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -14,39 +16,18 @@ const router = createRouter({
 router.push('/books')
 await router.isReady()
 
-
-interface Author {
-  name: string;
-}
-
-interface Book {
-  id: number;
-  title: string;
-  authors: Author[];
-  formats: { [key: string]: string };
-}
-
-interface Data {
-  results: Book[];
-  count: number;
-}
-
 const mockData = {
   loading: ref<boolean>(true),
   error: ref<null | string>(null),
   data: ref<Data | null>({
     results: [
       {
-        id: 1,
-        title: 'Book Title 1',
-        authors: [{ name: 'Author 1' }],
-        formats: { 'image/jpeg': 'link-to-cover-1.jpg' },
+        ...results
       },
-      // ... more books if necessary
     ],
     count: 2,
   }),
-};
+}
 
 vi.mock('../hooks/useGutendexData', () => ({
   useGutendexData: () => mockData,
@@ -91,10 +72,7 @@ describe('Books', () => {
     mockData.data.value = {
       results: [
         {
-          id: 1,
-          title: 'Book Title 1',
-          authors: [{ name: 'Author 1' }],
-          formats: { 'image/jpeg': 'link-to-cover-1.jpg' },
+          ...results
         },
       ],
       count: 2,
@@ -106,13 +84,13 @@ describe('Books', () => {
       },
     })
 
-     const h1 = wrapper.find('h1');
-     expect(h1.exists()).toBe(true);
-     expect(h1.text()).toContain('Books');
+    const h1 = wrapper.find('h1')
+    expect(h1.exists()).toBe(true)
+    expect(h1.text()).toContain('Books')
   })
 
   it('Renders the correct number of books', async () => {
     const bookItems = wrapper.findAll('article')
-    expect(bookItems.length).toBe(mockData.data.value?.results.length);
-  });
+    expect(bookItems.length).toBe(mockData.data.value?.results.length)
+  })
 })

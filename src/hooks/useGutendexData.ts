@@ -1,10 +1,12 @@
 import { ref, onMounted, Ref, watch } from 'vue'
 import axios from 'axios'
 import { useToast } from "vue-toastification"
+import { Book } from '../types/BookDetailsTypes'
+import { baseUrl } from '../constants'
 
 interface GutendexData {
   count: number;
-  results: any[];
+  results: Book[];
 }
 
 export function useGutendexData(page: Ref<number>) {
@@ -20,7 +22,7 @@ export function useGutendexData(page: Ref<number>) {
     loading.value = true
     error.value = null
     try {
-      const response = await axios.get(`https://gutendex.com/books`, {
+      const response = await axios.get(`${baseUrl}/books`, {
         params: {
           page: page.value,
         },
