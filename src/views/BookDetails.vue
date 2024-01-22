@@ -1,9 +1,9 @@
 <template>
   <section class="container mx-auto p-4">
-      <button class="btn mb-2 flex items-center" @click="goBack">
-        <img :src="BackArrow" class="h-5 relative" alt="back arrow">
-        Back
-      </button>
+    <button class="btn mb-2 flex items-center" @click="goBack">
+      <img :src="BackArrow" class="h-5 relative" alt="back arrow" />
+      Back
+    </button>
     <div v-if="!loading" class="card card-side bg-base-100 shadow-xl">
       <div class="card-body">
         <h1 class="card-title">{{ bookDetails.title }}</h1>
@@ -90,7 +90,13 @@
               <tr v-for="(url, format) in bookDetails.formats" :key="format">
                 <td>{{ format }}</td>
                 <td>
-                  <a :href="url" target="_blank" rel="noopener" class="link link-primary">Download</a>
+                  <a
+                    :href="url"
+                    target="_blank"
+                    rel="noopener"
+                    class="link link-primary"
+                    >Download</a
+                  >
                 </td>
               </tr>
             </tbody>
@@ -98,9 +104,7 @@
         </div>
       </div>
     </div>
-    <div v-if="loading">
-      <ContentLoader />
-    </div>
+    <ContentLoader v-if="loading" />
     <div v-if="error">
       <p>Error: error</p>
     </div>
@@ -118,9 +122,9 @@ import ContentLoader from '../components/loaders/DetailsLoader.vue'
 const props = defineProps({
   id: {
     type: String as PropType<string>,
-    required: true
+    required: true,
   },
-});
+})
 
 const router = useRouter()
 const { data, loading, error } = useBookDetailsData(props.id)

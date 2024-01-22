@@ -5,6 +5,15 @@ import ContentLoader from '../components/loaders/DetailsLoader.vue'
 import { useBookDetailsData } from '../hooks/useBookDetailsData'
 import { ref } from 'vue'
 import { Book } from '../types/BookDetailsTypes'
+import { createRouter, createWebHistory } from 'vue-router'
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes: [{ path: '/books/:id', component: BookDetails }],
+})
+
+router.push('/books/1')
+await router.isReady()
 
 const mockData = {
   loading: ref<boolean>(true),
@@ -22,6 +31,9 @@ describe('BookDetails', () => {
   })
 
   const wrapper = shallowMount(BookDetails, {
+    global: {
+      plugins: [router],
+    },
     props: {
       id: '1',
     },
@@ -40,7 +52,14 @@ describe('BookDetails', () => {
     mockData.error.value = 'error'
     mockData.data.value = null
 
-    const wrapper = shallowMount(BookDetails, {})
+    const wrapper = shallowMount(BookDetails, {
+      global: {
+        plugins: [router],
+      },
+      props: {
+        id: '1',
+      },
+    })
 
     expect(wrapper.text()).toContain('Error: error')
   })
@@ -72,7 +91,14 @@ describe('BookDetails', () => {
       },
     }
 
-    const wrapper = shallowMount(BookDetails, {})
+    const wrapper = shallowMount(BookDetails, {
+      global: {
+        plugins: [router],
+      },
+      props: {
+        id: '1',
+      },
+    })
 
     const h1 = wrapper.find('h1')
     expect(h1.exists()).toBe(true)

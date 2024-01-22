@@ -26,9 +26,7 @@
         </article>
       </section>
     </div>
-    <div v-if="loading">
-      <ContentLoader />
-    </div>
+    <ContentLoader v-if="loading" />
     <vue-awesome-paginate
       v-if="data && !loading"
       :total-items="data?.count || 0"

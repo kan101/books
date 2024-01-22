@@ -41,6 +41,9 @@ describe('Books', () => {
   const wrapper = shallowMount(Books, {
     global: {
       plugins: [router],
+      stubs: {
+        'vue-awesome-paginate': true
+      }
     },
   })
 
@@ -60,6 +63,9 @@ describe('Books', () => {
     const wrapper = shallowMount(Books, {
       global: {
         plugins: [router],
+        stubs: {
+          'vue-awesome-paginate': true
+        }
       },
     })
 
@@ -81,6 +87,9 @@ describe('Books', () => {
     const wrapper = shallowMount(Books, {
       global: {
         plugins: [router],
+        stubs: {
+          'vue-awesome-paginate': true
+        }
       },
     })
 
