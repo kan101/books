@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="max-w-full">
     <div v-if="data && !loading">
       <h1 class="text-center text-2xl font-bold my-6">Books</h1>
       <section
